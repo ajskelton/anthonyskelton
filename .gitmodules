@@ -1,0 +1,3 @@
+[submodule "public/content/themes/phobos"]
+	path = public/content/themes/phobos
+	url = https://github.com/ajskelton/phobos.git
