@@ -42,6 +42,9 @@
     "wpackagist-plugin/spinupwp": "*",
     "wpackagist-theme/twentynineteen": "*"
   },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest"
+  },
   "extra": {
     "wordpress-install-dir": "public/wp",
     "installer-paths": {
