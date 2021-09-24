@@ -36,6 +36,7 @@
     "johnpbloch/wordpress": "5.*",
     "oscarotero/env": "^1.1.0",
     "vlucas/phpdotenv": "^3.0",
+    "wpackagist-plugin/code-syntax-block":"2.1.1",
     "wpackagist-plugin/limit-login-attempts-reloaded": "*",
     "wpackagist-plugin/spinupwp": "*",
     "wpackagist-theme/twentynineteen": "*"
