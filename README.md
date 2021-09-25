@@ -28,3 +28,4 @@ Inspired by Root's Bedrock and other Composer based setups.
 5. Access WordPress admin at `https://mysite.com/wp/wp-admin/`
 
 
+
