@@ -26,4 +26,3 @@ Inspired by Root's Bedrock and other Composer based setups.
 3. Add theme(s) in `public/content/themes/` as you would for a normal WordPress site
 4. Set the document root in SpinupWP's server settings to `/public`. 
 5. Access WordPress admin at `https://mysite.com/wp/wp-admin/`
-
