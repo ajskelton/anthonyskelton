@@ -1,6 +1,8 @@
-# SpinupWP Composer Site
+# AnthonySkelton Composer Site
 
-This is a WordPress site setup using Composer that is primed and ready to be hosted using [SpinupWP](https://spinupwp.com/).
+[![buddy pipeline](https://app.buddy.works/redcartstudios/anthonyskelton/pipelines/pipeline/350582/badge.svg?token=5a86e32d1164d382cd99eada930cae12b1180f3661cee772cc7c3f36cc5cc721 "buddy pipeline")](https://app.buddy.works/redcartstudios/anthonyskelton/pipelines/pipeline/350582)
+
+This is a WordPress site setup using Composer. It is forked from the starter project from [SpinupWP](https://spinupwp.com/).
 
 Inspired by Root's Bedrock and other Composer based setups.
 
