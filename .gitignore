@@ -18,5 +18,7 @@ public/content/themes/twenty*
 public/content/mu-plugins/*
 !public/content/mu-plugins/app.php
 
+public/content/wflogs
+
 sql/
 db.php
