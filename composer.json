@@ -38,6 +38,7 @@
     "vlucas/phpdotenv": "^3.0",
     "wpackagist-plugin/akismet":"4.2.1",
     "wpackagist-plugin/code-syntax-block":"2.1.1",
+    "wpackagist-plugin/google-site-kit":"1.42.0",
     "wpackagist-plugin/limit-login-attempts-reloaded": "*",
     "wpackagist-plugin/mailgun":"1.7.9",
     "wpackagist-plugin/spinupwp": "*",
