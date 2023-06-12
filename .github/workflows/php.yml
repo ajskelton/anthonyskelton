@@ -31,6 +31,9 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-php-
 
+    - name: Add HTTP basic auth credentials
+      run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $GITHUB_WORKSPACE/auth.json
+
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
