@@ -1,26 +1,49 @@
-name: staging-deploy
+name: staging-build-deploy
 on:
   push:
     branches:
       - "dev/**"
 
 jobs:
-    deploy:
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v3
-          with:
-            fetch-depth: 0
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
 
-        - name: Deploy via SFTP
-          uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-          with:
-            protocol: ftps
-            server: ${{ secrets.SFTP_URL }}
-            local-dir: ${{ secrets.SFTP_STAGING_PATH }}
-            username: ${{ secrets.SFTP_STAGING_USER }}
-            password: ${{ secrets.SFTP_STAGING_PASSWORD }}
-            exclude: |
-              **/node_modules/**
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v3
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Add HTTP basic auth credentials
+        run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $GITHUB_WORKSPACE/auth.json
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Deploy via SFTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          protocol: ftps
+          server: ${{ secrets.SFTP_URL }}
+          local-dir: ${{ secrets.SFTP_STAGING_PATH }}
+          username: ${{ secrets.SFTP_STAGING_USER }}
+          password: ${{ secrets.SFTP_STAGING_PASSWORD }}
+          exclude: |
+            **/node_modules/**
