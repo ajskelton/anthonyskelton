@@ -46,7 +46,7 @@ jobs:
         with:
           protocol: ftps
           server: ${{ secrets.SFTP_URL }}
-          local-dir: ${{ secrets.SFTP_PATH }}
+          server-dir: ${{ secrets.SFTP_PATH }}
           username: ${{ secrets.SFTP_USER }}
           password: ${{ secrets.SFTP_PASSWORD }}
           exclude: |
