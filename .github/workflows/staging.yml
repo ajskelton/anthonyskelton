@@ -44,8 +44,8 @@ jobs:
       - name: Sync Files
         uses: SamKirkland/web-deploy@v1
         with:
-          target-server: ${{ secrets.SERVER }}
-          remote-user: ${{ secrets.USER }}
+          target-server: 167.71.113.24
+          remote-user: beta
           private-ssh-key: ${{ secrets.SSH_KEY }}
           destination-path: ${{ secrets.PATH }}
           rsync-options: --dry-run
