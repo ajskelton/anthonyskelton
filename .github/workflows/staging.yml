@@ -51,3 +51,4 @@ jobs:
           password: ${{ secrets.SFTP_PASSWORD }}
           exclude: |
             **/node_modules/**
+          dry-run: true
