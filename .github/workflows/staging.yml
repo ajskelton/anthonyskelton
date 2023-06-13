@@ -41,11 +41,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Sync Files
-        uses: SamKirkland/web-deploy@v1
+      - name: Deploy via SFTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          target-server: beta@167.71.113.24
-          remote-user: beta
-          private-ssh-key: ${{ secrets.SSH_KEY }}
-          destination-path: ${{ secrets.PATH }}
-          rsync-options: --dry-run
+          protocol: ftps
+          server: ${{ secrets.SFTP_URL }}
+          local-dir: ${{ secrets.SFTP_PATH }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          exclude: |
+            **/node_modules/**
