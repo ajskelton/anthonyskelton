@@ -1,4 +1,7 @@
-name: staging-build-deploy
+name: Staging Deployment
+
+concurrency: staging
+
 on:
   push:
     branches:
@@ -31,19 +34,18 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    environment: staging
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Deploy via SFTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      - name: Sync Files
+        uses: SamKirkland/web-deploy@v1
         with:
-          protocol: ftps
-          server: ${{ secrets.SFTP_URL }}
-          local-dir: ${{ secrets.SFTP_STAGING_PATH }}
-          username: ${{ secrets.SFTP_STAGING_USER }}
-          password: ${{ secrets.SFTP_STAGING_PASSWORD }}
-          exclude: |
-            **/node_modules/**
+          target-server: ${{ secrets.SERVER }}
+          remote-user: ${{ secrets.USER }}
+          private-ssh-key: ${{ secrets.SSH_KEY }}
+          destination-path: ${{ secrets.PATH }}
+          rsync-options: --dry-run
