@@ -1,11 +1,12 @@
 {
-  "name": "deliciousbrains/spinupwp-composer-site",
+  "name": "ajskelton/anthonyskeltondotcom",
+  "description": "Build for AnthonySkelton.com",
   "keywords": [
     "WordPress",
     "Composer",
     "SpinupWP"
   ],
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "authors": [
     {
       "name": "Delicious Brains",
@@ -44,11 +45,10 @@
     "wpackagist-plugin/code-syntax-block": "3.*",
     "wpackagist-plugin/google-site-kit": "1.*",
     "wpackagist-plugin/icon-block": "1.5.*",
-    "wpackagist-plugin/limit-login-attempts-reloaded": "*",
+    "wpackagist-plugin/limit-login-attempts-reloaded": "2.*",
     "wpackagist-plugin/mailgun": "1.*",
-    "wpackagist-plugin/spinupwp": "*",
-    "wpackagist-plugin/wordfence": "7.9.*",
-    "wpackagist-theme/twentynineteen": "*"
+    "wpackagist-plugin/spinupwp": "1.*",
+    "wpackagist-plugin/wordfence": "7.9.*"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"
