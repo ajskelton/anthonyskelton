@@ -44,11 +44,11 @@
     "wpackagist-plugin/code-block-pro": "^1.15",
     "wpackagist-plugin/code-syntax-block": "3.*",
     "wpackagist-plugin/google-site-kit": "1.*",
-    "wpackagist-plugin/icon-block": "1.5.*",
+    "wpackagist-plugin/icon-block": "1.6.*",
     "wpackagist-plugin/limit-login-attempts-reloaded": "2.*",
     "wpackagist-plugin/mailgun": "1.*",
     "wpackagist-plugin/spinupwp": "1.*",
-    "wpackagist-plugin/wordfence": "7.9.*"
+    "wpackagist-plugin/wordfence": "7.10.*"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest"
