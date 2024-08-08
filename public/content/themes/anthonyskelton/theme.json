@@ -13,7 +13,7 @@
         {
           "name": "Background",
           "slug": "background",
-          "color": "#FEFEFE"
+          "color": "#FCFCFC"
         },
         {
           "name": "Foreground",
@@ -36,7 +36,7 @@
       "blockGap": "1.5rem"
     },
     "layout": {
-      "contentSize": "650px",
+      "contentSize": "680px",
       "wideSize": "1200px"
     },
     "spacing": {
@@ -86,64 +86,41 @@
         {
           "fontFace": [
             {
-              "fontFamily": "EBGaramond",
+              "fontFamily": "Atkinson Hyperlegible",
               "fontStyle": "normal",
               "fontWeight": "400",
               "src": [
-                "file:./fonts/EBGaramond-Regular.ttf"
+                "file:./fonts/atkinson-hyperlegible-v11-latin-regular.woff2"
               ]
             },
             {
-              "fontFamily": "EBGaramond",
+              "fontFamily": "Atkinson Hyperlegible",
               "fontStyle": "normal",
               "fontWeight": "700",
               "src": [
-                "file:./fonts/EBGaramond-Bold.ttf"
+				  "file:./fonts/atkinson-hyperlegible-v11-latin-700.woff2"
               ]
             },
 			{
-			  "fontFamily": "EBGaramond",
+			  "fontFamily": "Atkinson Hyperlegible",
               "fontStyle": "italic",
               "fontWeight": "400",
               "src": [
-                "file:./fonts/EBGaramond-Italic.ttf"
+				  "file:./fonts/atkinson-hyperlegible-v11-latin-italic.woff2"
               ]
             },
 			{
-              "fontFamily": "EBGaramond",
+              "fontFamily": "Atkinson Hyperlegible",
               "fontStyle": "italic",
               "fontWeight": "700",
               "src": [
-                "file:./fonts/EBGaramond-BoldItalic.ttf"
+				  "file:./fonts/atkinson-hyperlegible-v11-latin-700italic.woff2"
               ]
 			}
           ],
-          "fontFamily": "\"EBGaramond\", sans-serif",
-          "name": "EB Garamond",
-          "slug": "ebgaramond"
-        },
-        {
-          "fontFace": [
-            {
-              "fontFamily": "Inter",
-              "fontStyle": "normal",
-              "fontWeight": "400",
-              "src": [
-                "file:./fonts/Inter-Regular.ttf"
-              ]
-            },
-            {
-              "fontFamily": "Inter",
-              "fontStyle": "normal",
-              "fontWeight": "700",
-              "src": [
-                "file:./fonts/Inter-Bold.ttf"
-              ]
-            }
-          ],
-          "fontFamily": "\"Inter\", serif",
-          "name": "Inter",
-          "slug": "inter"
+          "fontFamily": "\"Atkinson Hyperlegible\", sans-serif",
+          "name": "Atkinson Hyperlegible",
+          "slug": "atkinson-hyperlegible"
         }
       ],
       "fontSizes": [
@@ -158,7 +135,7 @@
         },
         {
           "fluid": {
-            "min": "1.13rem",
+            "min": "1.25rem",
             "max": "1.25rem"
           },
           "size": "1.25rem",
@@ -315,7 +292,6 @@
       },
       "heading": {
         "typography": {
-          "fontFamily": "var:preset|font-family|ebgaramond",
           "fontWeight": "400",
           "lineHeight": "1.2"
         }
@@ -360,7 +336,7 @@
       }
     },
     "typography": {
-      "fontFamily": "var:preset|font-family|inter",
+      "fontFamily": "var:preset|font-family|atkinson-hyperlegible",
       "fontSize": "var:preset|font-size|paragraph",
       "lineHeight": "1.6"
     }
@@ -387,5 +363,5 @@
       "area": "uncategorized"
     }
   ],
-  "version": 2
+  "version": 3
 }
