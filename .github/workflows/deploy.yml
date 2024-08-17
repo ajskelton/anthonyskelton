@@ -114,4 +114,4 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
           EXCLUDE: "/node_modules/"
-          ARGS: "-rlgoDzvc -i --delete --exclude .env"
+          ARGS: "-rlgoDzvc -i --delete --exclude-from=rsync-exclude.txt"
