@@ -18,11 +18,15 @@ import domReady from '@wordpress/dom-ready';
  * @see https://developer.wordpress.org/block-editor/reference-guides/block-api/block-styles/
  */
 const registerBlockStyles = {
-	// "core/cover": [
+	// "core/quote": [
 	// 	{
-	// 		name: "hero",
-	// 		label: "Hero",
+	// 		name: "console",
+	// 		label: "Console"
 	// 	},
+	// 	{
+	// 		name: "test",
+	// 		label: "Test"
+	// 	}
 	// ]
 };
 
@@ -93,13 +97,13 @@ const unregisterBlockVariations = {
  */
 domReady( function () {
 	Object.keys( registerBlockStyles ).forEach( ( block ) => {
-		registerBlockStyle( block, registerBlockStyles[ block ] );
+		wp.blocks.registerBlockStyle( block, registerBlockStyles[ block ] );
 	} );
 	Object.keys( registerBlockVariations ).forEach( ( block ) => {
-		registerBlockVariation( block, registerBlockVariations[ block ] );
+		wp.blocks.registerBlockVariation( block, registerBlockVariations[ block ] );
 	} );
 	unregisterBlocks.forEach( ( block ) => {
-		unregisterBlockType( block );
+		wp.blocks.unregisterBlockType( block );
 	} );
 
 	// Only run if we are in the post editor
@@ -110,9 +114,9 @@ domReady( function () {
 		} );
 	}
 	Object.keys( unregisterBlockStyles ).forEach( ( block ) => {
-		unregisterBlockStyle( block, unregisterBlockStyles[ block ] );
+		wp.blocks.unregisterBlockStyle( block, unregisterBlockStyles[ block ] );
 	} );
 	Object.keys( unregisterBlockVariations ).forEach( ( block ) => {
-		unregisterBlockVariation( block, unregisterBlockVariations[ block ] );
+		wp.blocks.unregisterBlockVariation( block, unregisterBlockVariations[ block ] );
 	} );
 } );
