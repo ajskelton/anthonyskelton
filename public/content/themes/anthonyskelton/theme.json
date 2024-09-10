@@ -482,6 +482,12 @@
 			"lineHeight": "1.6"
 		}
 	},
+	"customTemplates": [
+		{
+			"name": "page-no-title",
+			"title": "Page (No Title)"
+		}
+	],
 	"templateParts": [
 		{
 			"name": "header",
