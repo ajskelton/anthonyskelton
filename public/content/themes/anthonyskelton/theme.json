@@ -64,6 +64,11 @@
 					"name": "Tertiary Dark",
 					"slug": "tertiary-dark",
 					"color": "#436f21"
+				},
+				{
+					"name": "Code Background",
+					"slug": "code-background",
+					"color": "#292e38"
 				}
 			]
 		},
@@ -308,6 +313,9 @@
 					"color": "var:preset|color|foreground",
 					"style": "solid"
 				}
+			},
+			"core/paragraph": {
+				"css": "> code { background-color: var(--wp--preset--color--code-background); color: var(--wp--preset--color--background); padding: 0.1em 0.3em; border-radius: 0.2em; }"
 			},
 			"core/quote": {
 				"border": {
