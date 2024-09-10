@@ -1,35 +1,29 @@
-<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+<!-- wp:template-part {"slug":"header","theme":"anthonyskelton","tagName":"header"} /-->
 
 <!-- wp:group {"tagName":"main","style":{"spacing":{"margin":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|70"}}},"layout":{"type":"constrained"}} -->
 <main class="wp-block-group" style="margin-top:var(--wp--preset--spacing--50);margin-bottom:var(--wp--preset--spacing--70)"><!-- wp:query {"queryId":0,"query":{"pages":0,"offset":"0","postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false,"perPage":12},"layout":{"type":"constrained"}} -->
-<div class="wp-block-query"><!-- wp:post-template {"align":"wide","layout":{"type":"default","columnCount":"2"}} -->
-<!-- wp:post-title {"isLink":true,"style":{"spacing":{"padding":{"top":"0"},"margin":{"bottom":"var:preset|spacing|10"}}}} /-->
+	<div class="wp-block-query"><!-- wp:post-template {"align":"wide","layout":{"type":"default","columnCount":"2"}} -->
+		<!-- wp:post-title {"isLink":true,"style":{"spacing":{"padding":{"top":"0"},"margin":{"bottom":"var:preset|spacing|10"}}}} /-->
 
-<!-- wp:group {"style":{"spacing":{"blockGap":"0"}},"layout":{"type":"flex","orientation":"vertical"}} -->
-<div class="wp-block-group"><!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","flexWrap":"nowrap"}} -->
-<div class="wp-block-group"><!-- wp:paragraph -->
-<p>Published:</p>
-<!-- /wp:paragraph -->
+		<!-- wp:group {"style":{"spacing":{"blockGap":"0"}},"layout":{"type":"flex","orientation":"vertical"}} -->
+		<div class="wp-block-group"><!-- wp:group {"style":{"spacing":{"blockGap":"0"}},"layout":{"type":"flex","orientation":"vertical"}} -->
+			<div class="wp-block-group"><!-- wp:post-date {"isLink":true} /-->
 
-<!-- wp:post-date {"isLink":true} /-->
+				<!-- wp:post-date {"isLink":true,"displayType":"modified"} /--></div>
+			<!-- /wp:group -->
 
-<!-- wp:post-date {"isLink":true,"displayType":"modified"} /--></div>
+			<!-- wp:post-terms {"term":"category","prefix":"Published in "} /--></div>
+		<!-- /wp:group -->
+
+		<!-- wp:post-excerpt {"moreText":"Read More","showMoreOnNewLine":false,"excerptLength":30} /-->
+		<!-- /wp:post-template -->
+
+		<!-- wp:query-pagination {"paginationArrow":"arrow","align":"wide","layout":{"type":"flex","justifyContent":"space-between"}} -->
+		<!-- wp:query-pagination-previous {"label":"Newer Posts"} /-->
+
+		<!-- wp:query-pagination-next {"label":"Older Posts"} /-->
+		<!-- /wp:query-pagination --></div>
+	<!-- /wp:query --></main>
 <!-- /wp:group -->
 
-<!-- wp:post-terms {"term":"category","prefix":"Posted in "} /--></div>
-<!-- /wp:group -->
-
-<!-- wp:post-excerpt {"moreText":"Read More","showMoreOnNewLine":false,"excerptLength":30} /-->
-<!-- /wp:post-template -->
-
-<!-- wp:query-pagination {"paginationArrow":"arrow","align":"wide","layout":{"type":"flex","justifyContent":"space-between"}} -->
-<!-- wp:query-pagination-previous {"label":"Newer Posts"} /-->
-
-<!-- wp:query-pagination-next {"label":"Older Posts"} /-->
-<!-- /wp:query-pagination --></div>
-<!-- /wp:query -->
-
-</main>
-<!-- /wp:group -->
-
-<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->
+<!-- wp:template-part {"slug":"footer","theme":"anthonyskelton","tagName":"footer"} /-->

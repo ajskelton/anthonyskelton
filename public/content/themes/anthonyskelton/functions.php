@@ -23,3 +23,8 @@ require_once get_template_directory() . '/inc/enqueue.php';
  * Enqueue blocks related scripts, styles, and functionality.
  */
 require_once get_template_directory() . '/inc/enqueue-blocks.php';
+
+/**
+ * Include all hooks.
+ */
+require_once get_template_directory() . '/inc/hooks/index.php';
