@@ -41,6 +41,7 @@
     "sybrew/the-seo-framework": "^5.0",
     "vlucas/phpdotenv": "^3.0",
     "wpackagist-plugin/akismet": "5.*",
+    "wpackagist-plugin/change-last-modified-date":"1.4.7",
     "wpackagist-plugin/code-block-pro": "^1.15",
     "wpackagist-plugin/code-syntax-block": "3.*",
     "wpackagist-plugin/google-site-kit": "1.*",

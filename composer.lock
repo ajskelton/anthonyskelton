@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7caf5af6942251fc766baadb1ef2c949",
+    "content-hash": "f5d7518b4b13f672a6eadc806c8a972d",
     "packages": [
         {
             "name": "composer/installers",
@@ -676,6 +676,24 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/akismet/"
+        },
+        {
+            "name": "wpackagist-plugin/change-last-modified-date",
+            "version": "1.4.7",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/change-last-modified-date/",
+                "reference": "tags/1.4.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/change-last-modified-date.1.4.7.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/change-last-modified-date/"
         },
         {
             "name": "wpackagist-plugin/code-block-pro",
