@@ -1,0 +1,117 @@
+name: build-deploy
+
+on:
+  push:
+    branches:
+      - development
+    paths-ignore:
+      - 'bin/**'
+      - 'README.md'
+
+jobs:
+  build_site:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add HTTP basic auth credentials
+        run: echo '${{ secrets.COMPOSER_AUTH_JSON }}' > $GITHUB_WORKSPACE/auth.json
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache Composer vendor directory
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer Dependencies
+        uses: php-actions/composer@v6
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-build
+          path: |
+            vendor/
+            public/content/plugins/
+            public/wp/
+          retention-days: 1
+
+  build_theme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Node.js LTS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+
+      - name: Install Composer Dependencies
+        working-directory: ./public/content/themes/anthonyskelton
+        run: composer install
+
+      - name: Install Yarn Dependencies
+        working-directory: ./public/content/themes/anthonyskelton
+        run: npm install
+
+      - name: Build Theme
+        working-directory: ./public/content/themes/anthonyskelton
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: theme-build
+          path: |
+            ./public/content/themes/anthonyskelton/blocks/
+            ./public/content/themes/anthonyskelton/css/
+            ./public/content/themes/anthonyskelton/js/
+            ./public/content/themes/anthonyskelton/vendor/
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs:
+      - build_site
+      - build_theme
+    steps:
+      - name: Checkout
+        # Checkout our repository under `${GITHUB_WORKSPACE}`,
+        # So our workflow can access
+        uses: actions/checkout@v4.1.7
+        with:
+          # Fetch the entire Git history
+          fetch-depth: 0
+
+      - name: Download site artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: site-build
+          path: .
+
+      - name: Download theme artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: theme-build
+          path: ./public/content/themes/anthonyskelton
+
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@main
+        with:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.REMOTE_TARGET }}
+          EXCLUDE: "/node_modules/"
+          ARGS: "-rlgoDzvc -i --delete --exclude-from=rsync-exclude.txt"
