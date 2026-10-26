@@ -10,22 +10,21 @@
  */
 
 use \DeliciousBrains\SpinupWPComposerSite\App;
+use function Env\env;
 
 $root_dir    = dirname( __DIR__ );
 $webroot_dir = $root_dir . '/public';
 
 /**
- * Expose global env() function from oscarotero/env
- */
-Env::init();
-
-/**
  * Use Dotenv to set required environment variables and load .env file in root
  */
-$dotenv = \Dotenv\Dotenv::create( $root_dir );
+$dotenv    = \Dotenv\Dotenv::createUnsafeImmutable( $root_dir );
+$env_names = [];
 if ( file_exists( $root_dir . '/.env' ) ) {
 	$dotenv->load();
 	$dotenv->required( [ 'DB_NAME', 'DB_USER', 'DB_PASSWORD', 'WP_HOME', 'WP_SITEURL' ] );
+	// load() skips variables already set in the environment, so read every name from the file.
+	$env_names = array_keys( \Dotenv\Dotenv::parse( file_get_contents( $root_dir . '/.env' ) ) );
 }
 
 /**
@@ -48,7 +47,7 @@ App::define('DB_COLLATE', '');
 $table_prefix = env('DB_PREFIX') ?: 'wp_';
 
 // Set other constants from env file.
-foreach( $dotenv->getEnvironmentVariableNames() as $key ) {
+foreach( $env_names as $key ) {
 	App::define($key, env( $key ));
 }
 
