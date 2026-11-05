@@ -15,6 +15,11 @@ function modified_date(string $block_content, array $block, \WP_Block $instance 
 
 	$display_type = $block['attrs']['displayType'] ?? '';
 
+	// Lists opt out of the label with the `no-date-label` class.
+	if ( str_contains( $block['attrs']['className'] ?? '', 'no-date-label' ) ) {
+		return $block_content;
+	}
+
 	if ( 'modified' !== $display_type ) {
 		$string = 'Published: ';
 		return str_replace( '<time ', "<span>$string</span><time ", $block_content );
