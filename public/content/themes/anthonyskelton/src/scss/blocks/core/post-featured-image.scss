@@ -5,3 +5,14 @@
 .home-section__covers .wp-block-post-featured-image img {
 	object-position: bottom center;
 }
+
+// A book with no cover gets an empty 2:3 placeholder so its title still
+// lines up with the row.
+.book-card:not(:has(.wp-block-post-featured-image))::before {
+	content: "";
+	display: block;
+	aspect-ratio: 2 / 3;
+	margin-bottom: var(--wp--preset--spacing--20);
+	border: 1px solid var(--wp--preset--color--code-background);
+	background: var(--wp--preset--color--code-background);
+}

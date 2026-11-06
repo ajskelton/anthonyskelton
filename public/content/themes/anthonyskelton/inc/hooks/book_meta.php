@@ -23,7 +23,8 @@ function render( string $content, array $block ): string {
 	if ( false !== strpos( $class, 'book-meta--finished' ) && '' === get_post_meta( $post_id, 'book_date_read', true ) ) {
 		return '';
 	}
-	if ( false !== strpos( $class, 'book-meta--rating' ) && '' === get_post_meta( $post_id, 'book_rating', true ) ) {
+	// Registered number meta reads back as 0 when unset, and no real rating is 0.
+	if ( false !== strpos( $class, 'book-meta--rating' ) && ! (float) get_post_meta( $post_id, 'book_rating', true ) ) {
 		return '';
 	}
 	return $content;
