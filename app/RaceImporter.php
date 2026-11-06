@@ -94,6 +94,10 @@ class RaceImporter {
 					'post_title'    => $this->title( $race['name'] ),
 					'post_content'  => $this->content( $race ),
 					'post_date'     => $race['date'],
+					// Pin the date: a draft with no GMT date floats to the time it is
+					// saved or published, which would lose the race day.
+					'post_date_gmt' => get_gmt_from_date( $race['date'] ),
+					'edit_date'     => true,
 					'post_author'   => $author,
 					'post_category' => [ $category->term_id ],
 					'tags_input'    => [ $tag_id ],
