@@ -542,14 +542,25 @@ class BeerImporter {
 		}
 		usort( $manual, fn( $a, $b ) => ( $a['time'] ?? 0 ) <=> ( $b['time'] ?? 0 ) );
 
-		$brew_ts = (int) ( $b['brewDate'] ?? 0 ) / 1000;
+		$brew_ts  = (int) ( $b['brewDate'] ?? 0 ) / 1000;
+		$planning = ( $b['status'] ?? '' ) === 'Planning';
+		if ( $planning ) {
+			// A planned batch's "measured" fields hold the recipe estimates.
+			foreach ( array_keys( $b ) as $k ) {
+				if ( str_starts_with( $k, 'measured' ) ) {
+					unset( $b[ $k ] );
+				}
+			}
+		}
 		return [
 			'no'          => $b['batchNo'] ?? '',
 			'status'      => $b['status'] ?? '',
+			'planning'    => $planning,
+			'brew_year'   => $brew_ts ? (int) wp_date( 'Y', (int) $brew_ts ) : 0,
 			'brew_ts'     => $brew_ts,
 			'brew_date'   => $this->date( $b['brewDate'] ?? 0 ),
 			'ferm_date'   => $this->date( $b['fermentationStartDate'] ?? 0 ),
-			'package_date' => ! empty( $b['bottlingDateSet'] ) || ! empty( $b['bottlingDate'] ) ? $this->date( $b['bottlingDate'] ?? 0 ) : '',
+			'package_date' => ! $planning && ( ! empty( $b['bottlingDateSet'] ) || ! empty( $b['bottlingDate'] ) ) ? $this->date( $b['bottlingDate'] ?? 0 ) : '',
 			'og'          => $this->gravity( $b['measuredOg'] ?? 0 ),
 			'fg'          => $this->gravity( $b['measuredFg'] ?? 0 ),
 			'abv'         => $this->pct( $b['measuredAbv'] ?? 0 ),
@@ -559,8 +570,8 @@ class BeerImporter {
 			'mash_ph'     => (float) ( $b['measuredMashPh'] ?? 0 ),
 			'mash_eff'    => (float) ( $b['measuredMashEfficiency'] ?? 0 ),
 			'brewhouse'   => (float) ( $b['measuredEfficiency'] ?? 0 ),
-			'carb_type'   => $this->clean( $b['carbonationType'] ?? '' ),
-			'carb_psi'    => (float) ( $b['carbonationForce'] ?? 0 ),
+			'carb_type'   => $planning ? '' : $this->clean( $b['carbonationType'] ?? '' ),
+			'carb_psi'    => $planning ? 0 : (float) ( $b['carbonationForce'] ?? 0 ),
 			'notes'       => $this->clean( $b['batchNotes'] ?? '', true ),
 			'taste'       => $this->clean( $b['tasteNotes'] ?? '', true ),
 			'rating'      => (float) ( $b['tasteRating'] ?? 0 ),
@@ -611,12 +622,21 @@ class BeerImporter {
 	}
 
 	private function num( float $n, int $decimals = 2 ): string {
-		return rtrim( rtrim( number_format( $n, $decimals ), '0' ), '.' );
+		$out = number_format( $n, $decimals );
+		return $decimals > 0 ? rtrim( rtrim( $out, '0' ), '.' ) : $out;
 	}
 
 	private function date( $ms, string $format = 'M j, Y' ): string {
 		$ms = (int) $ms;
 		return $ms > 0 ? wp_date( $format, (int) ( $ms / 1000 ) ) : '';
+	}
+
+	/** "Nov 19" within the brew year, "Apr 6, 2024" outside it. */
+	private function day( int $ts, int $brew_year ): string {
+		if ( $ts <= 0 ) {
+			return '';
+		}
+		return wp_date( (int) wp_date( 'Y', $ts ) === $brew_year ? 'M j' : 'M j, Y', $ts );
 	}
 
 	/** Brewfather's generic "items" unit reads badly in a post. */
@@ -722,7 +742,7 @@ class BeerImporter {
 		if ( $b ) {
 			$inner .= $this->stats_list(
 				[
-					'Brewed'          => $b['brew_date'],
+					( $b['planning'] ? 'Brew day planned' : 'Brewed' ) => $b['brew_date'],
 					'Status'          => $b['status'],
 					'Packaged'        => $b['package_date'],
 					'Pre-boil'        => $b['pre_boil'],
@@ -741,12 +761,12 @@ class BeerImporter {
 				$inner .= $this->paragraphs( $b['notes'] );
 			}
 			if ( $b['timeline'] ) {
-				$inner .= $this->list( array_map( fn( $t ) => wp_date( 'M j', (int) $t['ts'] ) . ': ' . $t['text'], $b['timeline'] ) );
+				$inner .= $this->list( array_map( fn( $t ) => $this->day( (int) $t['ts'], $b['brew_year'] ) . ': ' . $t['text'], $b['timeline'] ) );
 			}
 			if ( $b['readings'] ) {
 				$rows = array_map(
 					fn( $r ) => [
-						$this->date( $r['time'] ?? 0, 'M j' ),
+						$this->day( (int) ( ( $r['time'] ?? 0 ) / 1000 ), $b['brew_year'] ),
 						isset( $r['sg'] ) && $r['sg'] ? number_format( (float) $r['sg'], 3 ) : '',
 						isset( $r['temp'] ) && null !== $r['temp'] ? round( (float) $r['temp'] * 9 / 5 + 32 ) . '°F' : '',
 						! empty( $r['pressure'] ) ? $this->num( (float) $r['pressure'], 1 ) . ' psi' : '',
@@ -755,7 +775,17 @@ class BeerImporter {
 					],
 					$b['readings']
 				);
-				$inner .= $this->table( [ 'Date', 'SG', 'Temp', 'Pressure', 'pH', 'Note' ], $rows );
+				$head = [ 'Date', 'SG', 'Temp', 'Pressure', 'pH', 'Note' ];
+				foreach ( array_reverse( array_keys( $head ) ) as $i ) {
+					if ( '' === implode( '', array_column( $rows, $i ) ) ) {
+						unset( $head[ $i ] );
+						foreach ( $rows as &$row ) {
+							unset( $row[ $i ] );
+						}
+						unset( $row );
+					}
+				}
+				$inner .= $this->table( array_values( $head ), array_map( 'array_values', $rows ) );
 			}
 			if ( $b['device_readings'] ) {
 				$inner .= $this->paragraph( sprintf( '%d more readings were logged by a device.', $b['device_readings'] ) );
