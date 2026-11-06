@@ -107,6 +107,11 @@ class Books {
 		if ( $query->is_post_type_archive( self::POST_TYPE ) || $query->is_tax( self::TAXONOMY ) ) {
 			$query->set( 'posts_per_page', 48 );
 		}
+		// Books are excluded from search, which also drops them from the implicit
+		// post type a shelf page would resolve to, so name the type explicitly.
+		if ( $query->is_tax( self::TAXONOMY ) ) {
+			$query->set( 'post_type', self::POST_TYPE );
+		}
 		// The main Library page is books read or in progress; the other shelves have their own pages.
 		if ( $query->is_post_type_archive( self::POST_TYPE ) && ! $query->is_tax( self::TAXONOMY ) ) {
 			$query->set(
