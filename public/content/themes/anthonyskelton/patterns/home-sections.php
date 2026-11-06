@@ -37,7 +37,8 @@ foreach ( $home_sections as $home_section_slug ) :
 
 <?php
 if ( 'books' === $home_section_slug && post_type_exists( 'book' ) ) :
-	$home_shelves = array_filter( array_map( fn( $slug ) => ( $t = get_term_by( 'slug', $slug, 'shelf' ) ) ? (int) $t->term_id : 0, [ 'read', 'currently-reading' ] ) );
+	// Finished books only; the Library page has its own currently-reading strip.
+	$home_shelves = array_filter( array_map( fn( $slug ) => ( $t = get_term_by( 'slug', $slug, 'shelf' ) ) ? (int) $t->term_id : 0, [ 'read' ] ) );
 	$home_shelves = wp_json_encode( array_values( $home_shelves ) );
 	?>
 <!-- wp:query {"queryId":30,"query":{"perPage":6,"pages":0,"offset":0,"postType":"book","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false,"taxQuery":{"shelf":<?php echo $home_shelves; ?>}},"className":"home-section__covers"} -->
