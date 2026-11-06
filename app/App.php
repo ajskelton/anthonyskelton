@@ -10,6 +10,7 @@ class App {
 	 * 	Load custom site code
 	 */
 	public function register() {
+		( new Books() )->register();
 	}
 
 	/**
