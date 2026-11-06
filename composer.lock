@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec64f29a2e34c3cc1f186493913ea7c6",
+    "content-hash": "c1ef21fc21b831ecec3e3857b2c4d88d",
     "packages": [
         {
             "name": "composer/installers",
@@ -938,24 +938,6 @@
             },
             "type": "wordpress-plugin",
             "homepage": "https://wordpress.org/plugins/change-last-modified-date/"
-        },
-        {
-            "name": "wpackagist-plugin/code-block-pro",
-            "version": "1.28.0",
-            "source": {
-                "type": "svn",
-                "url": "https://plugins.svn.wordpress.org/code-block-pro/",
-                "reference": "tags/1.28.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/code-block-pro.1.28.0.zip"
-            },
-            "require": {
-                "composer/installers": "^1.0 || ^2.0"
-            },
-            "type": "wordpress-plugin",
-            "homepage": "https://wordpress.org/plugins/code-block-pro/"
         },
         {
             "name": "wpackagist-plugin/google-site-kit",
@@ -2249,5 +2231,5 @@
         "php": ">=7.1"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }

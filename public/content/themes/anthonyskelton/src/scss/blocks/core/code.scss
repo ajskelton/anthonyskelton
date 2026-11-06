@@ -1,0 +1,224 @@
+// Code block: highlighted on the server by the Syntax-highlighting Code Block
+// plugin (highlight.php, class-based output). The plugin's own stylesheets are
+// disabled in inc/hooks/code_block.php; this file replaces them with a palette
+// that follows the site's light/dark mode (see base/dark-mode.scss).
+
+@mixin code-tokens-light {
+	--code-comment: #6a737d;
+	--code-keyword: #d73a49;
+	--code-string: #0a3069;
+	--code-number: #0550ae;
+	--code-title: #6639ba;
+	--code-attr: #953800;
+	--code-builtin: #0550ae;
+	--code-tag: #116329;
+	--code-meta: #735c0f;
+	--code-line-number: #8c959f;
+	--code-line-highlight: rgba(84, 174, 255, 0.2);
+}
+
+@mixin code-tokens-dark {
+	--code-comment: #8b949e;
+	--code-keyword: #ff7b72;
+	--code-string: #a5d6ff;
+	--code-number: #79c0ff;
+	--code-title: #d2a8ff;
+	--code-attr: #ffa657;
+	--code-builtin: #79c0ff;
+	--code-tag: #7ee787;
+	--code-meta: #ffa657;
+	--code-line-number: #6e7681;
+	--code-line-highlight: rgba(56, 139, 253, 0.25);
+}
+
+:root {
+	@include code-tokens-light;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) {
+		@include code-tokens-dark;
+	}
+}
+
+:root[data-theme="dark"] {
+	@include code-tokens-dark;
+}
+
+.wp-block-code {
+	position: relative;
+	border: 0;
+	text-size-adjust: 100%;
+
+	// The plugin wraps the <code> in a <span> so the language label can sit outside the scroll area.
+	> span {
+		display: block;
+		overflow: auto;
+	}
+
+	code.hljs:not(.shcb-wrap-lines) {
+		white-space: pre;
+	}
+
+	code.hljs.shcb-wrap-lines {
+		white-space: pre-wrap;
+	}
+
+	// Language label, top right. The plugin's markup reads
+	// "Code language: JavaScript (javascript)"; show only the name.
+	.shcb-language {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 0.15em 0.75em;
+		font-family: var(--wp--preset--font-family--atkinson-hyperlegible);
+		font-size: var(--wp--preset--font-size--xs, 0.75rem);
+		line-height: 1.6;
+		color: var(--code-comment);
+		border-bottom-left-radius: 0.25rem;
+		pointer-events: none;
+
+		&__label,
+		&__paren,
+		&__slug {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+			clip: rect(0 0 0 0);
+			white-space: nowrap;
+		}
+	}
+}
+
+.hljs {
+	box-sizing: border-box;
+
+	&.shcb-code-table {
+		display: table;
+		width: 100%;
+
+		> .shcb-loc {
+			display: table-row;
+			width: 100%;
+			color: inherit;
+		}
+
+		.shcb-loc > span {
+			display: table-cell;
+		}
+	}
+
+	&.shcb-line-numbers {
+		border-spacing: 0;
+		counter-reset: line;
+
+		> .shcb-loc {
+			counter-increment: line;
+		}
+
+		.shcb-loc > span {
+			padding-left: 0.75em;
+		}
+
+		.shcb-loc::before {
+			content: counter(line);
+			display: table-cell;
+			width: 1%;
+			padding: 0 0.75em;
+			border-right: 1px solid var(--code-line-number);
+			color: var(--code-line-number);
+			text-align: right;
+			white-space: nowrap;
+			user-select: none;
+		}
+	}
+
+	> mark.shcb-loc {
+		background-color: var(--code-line-highlight);
+		color: inherit;
+	}
+}
+
+// Token colours (highlight.js 9-era class names).
+.hljs-comment,
+.hljs-quote {
+	color: var(--code-comment);
+	font-style: italic;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-doctag {
+	color: var(--code-keyword);
+}
+
+.hljs-string,
+.hljs-regexp,
+.hljs-link,
+.hljs-template-tag {
+	color: var(--code-string);
+}
+
+.hljs-number,
+.hljs-literal,
+.hljs-symbol,
+.hljs-bullet {
+	color: var(--code-number);
+}
+
+.hljs-title,
+.hljs-section,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-class .hljs-title,
+.hljs-function .hljs-title {
+	color: var(--code-title);
+}
+
+.hljs-attr,
+.hljs-attribute,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-params,
+.hljs-selector-attr,
+.hljs-selector-pseudo {
+	color: var(--code-attr);
+}
+
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-type {
+	color: var(--code-builtin);
+}
+
+.hljs-tag,
+.hljs-name {
+	color: var(--code-tag);
+}
+
+.hljs-meta,
+.hljs-meta-keyword,
+.hljs-meta-string {
+	color: var(--code-meta);
+}
+
+.hljs-subst {
+	color: inherit;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+
+.hljs-deletion {
+	background: color-mix(in srgb, var(--code-keyword) 20%, transparent);
+}
+
+.hljs-addition {
+	background: color-mix(in srgb, var(--code-tag) 20%, transparent);
+}
