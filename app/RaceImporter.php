@@ -116,6 +116,79 @@ class RaceImporter {
 		WP_CLI::success( sprintf( '%d created, %d skipped%s.', $created, $skipped, $dry_run ? ' (dry run)' : '' ) );
 	}
 
+	/**
+	 * Add each activity's Strava description to its existing draft as
+	 * paragraphs under the stats block. Posts that already carry the notes,
+	 * or activities without a description, are skipped.
+	 *
+	 * ## OPTIONS
+	 *
+	 * <file>
+	 * : Path to a JSON array of Strava activities.
+	 *
+	 * [--dry-run]
+	 * : Report what would change without writing anything.
+	 *
+	 * @when after_wp_load
+	 */
+	public function notes( $args, $assoc ) {
+		[ $file ] = $args;
+		$dry_run  = ! empty( $assoc['dry-run'] );
+
+		if ( ! is_readable( $file ) ) {
+			WP_CLI::error( "Cannot read $file" );
+		}
+		$activities = json_decode( file_get_contents( $file ), true );
+		if ( ! is_array( $activities ) ) {
+			WP_CLI::error( 'File is not a JSON array of activities.' );
+		}
+
+		$updated = 0;
+		$skipped = 0;
+		foreach ( $activities as $activity ) {
+			$race = $this->normalize( $activity );
+			if ( ! $race ) {
+				$skipped++;
+				continue;
+			}
+			$post_id = $this->find_existing( $race['id'] );
+			$notes   = $this->notes_markup( $race['notes'] );
+			if ( ! $post_id || ! $notes ) {
+				WP_CLI::log( sprintf( 'skip   %s (%s)', $race['name'], $post_id ? 'no description' : 'no post' ) );
+				$skipped++;
+				continue;
+			}
+			$post = get_post( $post_id );
+			if ( false !== strpos( $post->post_content, $notes ) ) {
+				WP_CLI::log( sprintf( 'skip   %s (notes already present)', $race['name'] ) );
+				$skipped++;
+				continue;
+			}
+			$marker = "<!-- /wp:group -->\n";
+			$pos    = strpos( $post->post_content, $marker );
+			if ( false === $pos ) {
+				WP_CLI::warning( sprintf( '%s: no race-stats group found in post %d', $race['name'], $post_id ) );
+				$skipped++;
+				continue;
+			}
+			WP_CLI::log( sprintf( 'notes  %s', $race['name'] ) );
+			if ( $dry_run ) {
+				$updated++;
+				continue;
+			}
+			$content = substr_replace( $post->post_content, "\n" . $notes, $pos + strlen( $marker ), 0 );
+			$result  = wp_update_post( [ 'ID' => $post_id, 'post_content' => $content, 'edit_date' => true ], true );
+			if ( is_wp_error( $result ) ) {
+				WP_CLI::warning( $result->get_error_message() );
+				$skipped++;
+				continue;
+			}
+			$updated++;
+		}
+
+		WP_CLI::success( sprintf( '%d updated, %d skipped%s.', $updated, $skipped, $dry_run ? ' (dry run)' : '' ) );
+	}
+
 	private function ensure_tag( bool $dry_run ): int {
 		[ $name, $slug ] = self::TAG;
 		$term            = get_term_by( 'slug', $slug, 'post_tag' );
@@ -171,6 +244,7 @@ class RaceImporter {
 			'name'  => $name,
 			'date'  => gmdate( 'Y-m-d H:i:s', $ts ),
 			'url'   => 'https://www.strava.com/activities/' . $id,
+			'notes' => trim( (string) ( $activity['description'] ?? '' ) ),
 			'stats' => [
 				'distance'  => sprintf( '%.2f mi (%.2f km)', $miles, $meters / 1000 ),
 				'elapsed'   => $this->duration( $elapsed ),
@@ -188,11 +262,37 @@ class RaceImporter {
 	 * (as core does on non-utf8mb4 sites) unless the column can hold them.
 	 */
 	private function title( string $name ): string {
+		return $this->encode( $name, 'post_title' );
+	}
+
+	private function encode( string $text, string $column ): string {
 		global $wpdb;
-		if ( 'utf8mb4' === $wpdb->get_col_charset( $wpdb->posts, 'post_title' ) ) {
-			return $name;
+		if ( 'utf8mb4' === $wpdb->get_col_charset( $wpdb->posts, $column ) ) {
+			return $text;
 		}
-		return wp_encode_emoji( $name );
+		return wp_encode_emoji( $text );
+	}
+
+	/**
+	 * Strava description as paragraph blocks: blank lines separate
+	 * paragraphs, single newlines become line breaks.
+	 */
+	private function notes_markup( string $notes ): string {
+		$notes = str_replace( "\r\n", "\n", $notes );
+		if ( '' === $notes ) {
+			return '';
+		}
+		$markup = '';
+		foreach ( preg_split( '/\n\s*\n/', $notes ) as $paragraph ) {
+			$lines = array_map( 'trim', explode( "\n", trim( $paragraph ) ) );
+			$lines = array_filter( $lines, fn( $l ) => '' !== $l );
+			if ( ! $lines ) {
+				continue;
+			}
+			$html    = implode( '<br>', array_map( 'esc_html', $lines ) );
+			$markup .= "<!-- wp:paragraph -->\n<p>" . $this->encode( $html, 'post_content' ) . "</p>\n<!-- /wp:paragraph -->\n\n";
+		}
+		return $markup;
 	}
 
 	private function duration( int $seconds ): string {
@@ -231,6 +331,7 @@ class RaceImporter {
 			. "<ul class=\"wp-block-list\">$items</ul>\n"
 			. "<!-- /wp:list --></div>\n"
 			. "<!-- /wp:group -->\n\n"
+			. $this->notes_markup( $race['notes'] )
 			. "<!-- wp:paragraph -->\n<p>" . esc_html( self::PLACEHOLDER ) . "</p>\n<!-- /wp:paragraph -->";
 	}
 }
