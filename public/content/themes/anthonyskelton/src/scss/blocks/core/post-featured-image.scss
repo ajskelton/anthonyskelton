@@ -11,6 +11,7 @@
 .book-card:not(:has(.wp-block-post-featured-image))::before {
 	content: "";
 	display: block;
+	width: 100%;
 	aspect-ratio: 2 / 3;
 	margin-bottom: var(--wp--preset--spacing--20);
 	border: 1px solid var(--wp--preset--color--code-background);
