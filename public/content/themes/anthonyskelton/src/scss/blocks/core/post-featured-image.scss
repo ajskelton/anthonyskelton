@@ -6,6 +6,15 @@
 	object-position: bottom center;
 }
 
+// The home page cover grid sits in a flex-column tile inside the sections
+// grid. Core gives an auto-fill grid `container-type: inline-size`, and under
+// that containment Chrome sizes the grid's height as if it were zero wide, so
+// the Query block ends up far shorter than its covers and the links after it
+// render on top of the second row. Plain block sizing fixes it.
+.home-section__covers .wp-block-post-template {
+	container-type: normal;
+}
+
 // A book with no cover gets an empty 2:3 placeholder so its title still
 // lines up with the row.
 .book-card:not(:has(.wp-block-post-featured-image))::before {

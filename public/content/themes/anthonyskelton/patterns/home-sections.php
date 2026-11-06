@@ -23,7 +23,7 @@ foreach ( $home_sections as $home_section_slug ) :
 	$home_section_terms = array_merge( array( (int) $home_section->term_id ), array_map( 'intval', get_term_children( $home_section->term_id, 'category' ) ) );
 	$home_section_terms = wp_json_encode( array_values( $home_section_terms ) );
 	?>
-<!-- wp:group {"className":"home-section","style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"flex","orientation":"vertical"}} -->
+<!-- wp:group {"className":"home-section","style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"flex","orientation":"vertical","justifyContent":"stretch"}} -->
 <div class="wp-block-group home-section">
 <!-- wp:heading {"level":2,"fontSize":"h4","style":{"spacing":{"padding":{"top":"0"}}}} -->
 <h2 class="wp-block-heading has-h-4-font-size" style="padding-top:0"><a href="<?php echo $home_section_link; ?>"><?php echo $home_section_name; ?></a></h2>
