@@ -14,6 +14,7 @@ class App {
 
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			\WP_CLI::add_command( 'race', RaceImporter::class );
+			\WP_CLI::add_command( 'beer', BeerImporter::class );
 		}
 	}
 
