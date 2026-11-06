@@ -11,6 +11,10 @@ class App {
 	 */
 	public function register() {
 		( new Books() )->register();
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'race', RaceImporter::class );
+		}
 	}
 
 	/**
