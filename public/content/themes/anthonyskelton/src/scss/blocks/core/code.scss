@@ -1,7 +1,7 @@
-// Code block: highlighted on the server by the Syntax-highlighting Code Block
-// plugin (highlight.php, class-based output). The plugin's own stylesheets are
-// disabled in inc/hooks/code_block.php; this file replaces them with a palette
-// that follows the site's light/dark mode (see base/dark-mode.scss).
+// Code block: highlighted in the browser by Prism (src/js/code.js), with
+// `language-*` classes added by inc/hooks/code_block.php. Token colours are
+// custom properties so they follow the site's light/dark mode (see
+// base/dark-mode.scss).
 
 @mixin code-tokens-light {
 	--code-comment: #6a737d;
@@ -50,23 +50,14 @@
 	border: 0;
 	text-size-adjust: 100%;
 
-	// The plugin wraps the <code> in a <span> so the language label can sit outside the scroll area.
-	> span {
+	code {
 		display: block;
-		overflow: auto;
-	}
-
-	code.hljs:not(.shcb-wrap-lines) {
 		white-space: pre;
 	}
 
-	code.hljs.shcb-wrap-lines {
-		white-space: pre-wrap;
-	}
-
-	// Language label, top right. The plugin's markup reads
-	// "Code language: JavaScript (javascript)"; show only the name.
-	.shcb-language {
+	// Language label, top right (set by the render filter).
+	&[data-language]::before {
+		content: attr(data-language);
 		position: absolute;
 		top: 0;
 		right: 0;
@@ -75,150 +66,134 @@
 		font-size: var(--wp--preset--font-size--xs, 0.75rem);
 		line-height: 1.6;
 		color: var(--code-comment);
-		border-bottom-left-radius: 0.25rem;
 		pointer-events: none;
+	}
 
-		&__label,
-		&__paren,
-		&__slug {
+	// Prism line-numbers plugin.
+	&.line-numbers {
+		padding-left: calc(var(--wp--preset--spacing--50) + 3em);
+		counter-reset: linenumber;
+
+		> code {
+			position: relative;
+		}
+
+		.line-numbers-rows {
 			position: absolute;
-			width: 1px;
-			height: 1px;
-			overflow: hidden;
-			clip: rect(0 0 0 0);
-			white-space: nowrap;
+			top: 0;
+			left: -3em;
+			width: 2.25em;
+			pointer-events: none;
+			user-select: none;
+			border-right: 1px solid var(--code-line-number);
+			letter-spacing: -1px;
+
+			> span {
+				display: block;
+				counter-increment: linenumber;
+
+				&::before {
+					content: counter(linenumber);
+					display: block;
+					padding-right: 0.6em;
+					text-align: right;
+					color: var(--code-line-number);
+				}
+			}
 		}
 	}
 }
 
-.hljs {
-	box-sizing: border-box;
-
-	&.shcb-code-table {
-		display: table;
-		width: 100%;
-
-		> .shcb-loc {
-			display: table-row;
-			width: 100%;
-			color: inherit;
-		}
-
-		.shcb-loc > span {
-			display: table-cell;
-		}
+// Token colours (Prism class names).
+.token {
+	&.comment,
+	&.prolog,
+	&.doctype,
+	&.cdata {
+		color: var(--code-comment);
+		font-style: italic;
 	}
 
-	&.shcb-line-numbers {
-		border-spacing: 0;
-		counter-reset: line;
-
-		> .shcb-loc {
-			counter-increment: line;
-		}
-
-		.shcb-loc > span {
-			padding-left: 0.75em;
-		}
-
-		.shcb-loc::before {
-			content: counter(line);
-			display: table-cell;
-			width: 1%;
-			padding: 0 0.75em;
-			border-right: 1px solid var(--code-line-number);
-			color: var(--code-line-number);
-			text-align: right;
-			white-space: nowrap;
-			user-select: none;
-		}
+	&.keyword,
+	&.important,
+	&.atrule,
+	&.rule {
+		color: var(--code-keyword);
 	}
 
-	> mark.shcb-loc {
-		background-color: var(--code-line-highlight);
+	&.string,
+	&.char,
+	&.regex,
+	&.url,
+	&.attr-value,
+	&.template-string {
+		color: var(--code-string);
+	}
+
+	&.number,
+	&.boolean,
+	&.constant,
+	&.symbol,
+	&.unit,
+	&.hexcode {
+		color: var(--code-number);
+	}
+
+	&.function,
+	&.class-name,
+	&.selector,
+	&.maybe-class-name {
+		color: var(--code-title);
+	}
+
+	&.attr-name,
+	&.property,
+	&.variable,
+	&.parameter,
+	&.pseudo-class,
+	&.pseudo-element {
+		color: var(--code-attr);
+	}
+
+	&.builtin,
+	&.namespace {
+		color: var(--code-builtin);
+	}
+
+	&.tag,
+	&.tag .token.punctuation {
+		color: var(--code-tag);
+	}
+
+	&.operator,
+	&.punctuation,
+	&.entity,
+	&.delimiter {
 		color: inherit;
 	}
+
+	&.deleted {
+		background: color-mix(in srgb, var(--code-keyword) 20%, transparent);
+	}
+
+	&.inserted {
+		background: color-mix(in srgb, var(--code-tag) 20%, transparent);
+	}
+
+	&.bold {
+		font-weight: bold;
+	}
+
+	&.italic {
+		font-style: italic;
+	}
 }
 
-// Token colours (highlight.js 9-era class names).
-.hljs-comment,
-.hljs-quote {
-	color: var(--code-comment);
-	font-style: italic;
-}
-
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-doctag {
-	color: var(--code-keyword);
-}
-
-.hljs-string,
-.hljs-regexp,
-.hljs-link,
-.hljs-template-tag {
-	color: var(--code-string);
-}
-
-.hljs-number,
-.hljs-literal,
-.hljs-symbol,
-.hljs-bullet {
-	color: var(--code-number);
-}
-
-.hljs-title,
-.hljs-section,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-class .hljs-title,
-.hljs-function .hljs-title {
-	color: var(--code-title);
-}
-
-.hljs-attr,
-.hljs-attribute,
-.hljs-variable,
-.hljs-template-variable,
-.hljs-params,
-.hljs-selector-attr,
-.hljs-selector-pseudo {
-	color: var(--code-attr);
-}
-
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-type {
-	color: var(--code-builtin);
-}
-
-.hljs-tag,
-.hljs-name {
-	color: var(--code-tag);
-}
-
-.hljs-meta,
-.hljs-meta-keyword,
-.hljs-meta-string {
-	color: var(--code-meta);
-}
-
-.hljs-subst {
+// Attribute values in JSX braces are real script, so colour the inner tokens
+// as code rather than as a string.
+.language-jsx .token.attr-value > .token.punctuation,
+.language-tsx .token.attr-value > .token.punctuation,
+.language-jsx .token.script,
+.language-tsx .token.script {
 	color: inherit;
-}
-
-.hljs-emphasis {
-	font-style: italic;
-}
-
-.hljs-strong {
-	font-weight: bold;
-}
-
-.hljs-deletion {
-	background: color-mix(in srgb, var(--code-keyword) 20%, transparent);
-}
-
-.hljs-addition {
-	background: color-mix(in srgb, var(--code-tag) 20%, transparent);
 }
