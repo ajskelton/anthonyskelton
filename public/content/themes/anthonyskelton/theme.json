@@ -69,6 +69,11 @@
 					"name": "Code Background",
 					"slug": "code-background",
 					"color": "#292e38"
+				},
+				{
+					"name": "Code Foreground",
+					"slug": "code-foreground",
+					"color": "#d8dee9"
 				}
 			]
 		},
@@ -207,6 +212,11 @@
 					"fontFamily": "\"Atkinson Hyperlegible\", sans-serif",
 					"name": "Atkinson Hyperlegible",
 					"slug": "atkinson-hyperlegible"
+				},
+				{
+					"fontFamily": "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
+					"name": "Monospace",
+					"slug": "mono"
 				}
 			],
 			"fontSizes": [
@@ -314,9 +324,6 @@
 					"style": "solid"
 				}
 			},
-			"core/paragraph": {
-				"css": "> code { background-color: var(--wp--preset--color--code-background); color: var(--wp--preset--color--background); padding: 0.1em 0.3em; border-radius: 0.2em; }"
-			},
 			"core/quote": {
 				"border": {
 					"width": "4px",
@@ -352,6 +359,29 @@
 						}
 					}
 				}
+			},
+			"core/code": {
+				"color": {
+					"background": "var:preset|color|code-background",
+					"text": "var:preset|color|code-foreground"
+				},
+				"border": {
+					"radius": "0px"
+				},
+				"spacing": {
+					"padding": {
+						"top": "var:preset|spacing|40",
+						"right": "var:preset|spacing|50",
+						"bottom": "var:preset|spacing|40",
+						"left": "var:preset|spacing|50"
+					}
+				},
+				"typography": {
+					"fontFamily": "var:preset|font-family|mono",
+					"fontSize": "0.875rem",
+					"lineHeight": "1.45"
+				},
+				"css": "overflow-x: auto; tab-size: 2; & code { font-family: inherit; font-size: inherit; background: none; color: inherit; padding: 0; } &[title]::before { content: attr(title); display: block; margin: calc(-1 * var(--wp--preset--spacing--40)) calc(-1 * var(--wp--preset--spacing--50)) var(--wp--preset--spacing--40); padding: var(--wp--preset--spacing--20) var(--wp--preset--spacing--50); background: #39404f; color: #c8d0e0; font-family: var(--wp--preset--font-family--atkinson-hyperlegible); font-size: var(--wp--preset--font-size--sm); }"
 			}
 		},
 		"color": {

@@ -1,0 +1,19 @@
+// System dark mode: swap the theme.json palette presets so every block that
+// references a preset follows the visitor's preference. Code blocks keep their
+// own dark palette in both modes.
+html {
+	color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--wp--preset--color--background: #181a1f;
+		--wp--preset--color--foreground: #f0f0f0;
+		--wp--preset--color--primary-light: #21436f;
+		--wp--preset--color--primary-dark: #a0c2ef;
+		--wp--preset--color--secondary-light: #6f2143;
+		--wp--preset--color--secondary-dark: #efa0c2;
+		--wp--preset--color--tertiary-light: #436f21;
+		--wp--preset--color--tertiary-dark: #c2efa0;
+	}
+}

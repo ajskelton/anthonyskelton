@@ -6,3 +6,13 @@ ul,
 ol {
 	padding: 0 0 0 var(--wp--preset--spacing--50);
 }
+
+// Inline code (not inside a code block) shares the code block palette.
+:not(pre) > code {
+	background-color: var(--wp--preset--color--code-background);
+	color: var(--wp--preset--color--code-foreground);
+	font-family: var(--wp--preset--font-family--mono);
+	font-size: 0.9em;
+	padding: 0.1em 0.3em;
+	border-radius: 0.2em;
+}
