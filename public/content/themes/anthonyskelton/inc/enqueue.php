@@ -39,6 +39,28 @@ function front_end_scripts() {
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\front_end_scripts' );
 
 /**
+ * Restore the visitor's saved light/dark choice before first paint.
+ *
+ * Runs as early as possible in <head> so the page never flashes the wrong
+ * palette. `src/js/scripts.js` owns the toggle button itself.
+ *
+ * @return void
+ */
+function theme_preference_script() {
+	?>
+	<script>
+		try {
+			var t = localStorage.getItem( 'theme' );
+			if ( t === 'light' || t === 'dark' ) {
+				document.documentElement.dataset.theme = t;
+			}
+		} catch ( e ) {}
+	</script>
+	<?php
+}
+add_action( 'wp_head', __NAMESPACE__ . '\theme_preference_script', 0 );
+
+/**
  * Enqueue editor specific modifications in the Post Editor, Site Editor,
  * and Widgets Editor.
  *
