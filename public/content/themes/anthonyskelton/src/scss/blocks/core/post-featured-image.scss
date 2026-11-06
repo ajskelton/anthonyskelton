@@ -1,0 +1,7 @@
+// Book covers keep a 2:3 box so grid rows line up, but are shown whole
+// (object-fit: contain) and sit on the bottom edge so odd-sized covers rest
+// on the same baseline as their neighbours.
+.book-card__cover img,
+.home-section__covers .wp-block-post-featured-image img {
+	object-position: bottom center;
+}

@@ -14,7 +14,7 @@
 	<!-- wp:post-template {"style":{"spacing":{"blockGap":"var:preset|spacing|60"}},"layout":{"type":"grid","minimumColumnWidth":"9rem"}} -->
 	<!-- wp:group {"className":"book-card","style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","orientation":"vertical"}} -->
 	<div class="wp-block-group book-card">
-		<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"2/3","scale":"cover","className":"book-card__cover"} /-->
+		<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"2/3","scale":"contain","className":"book-card__cover"} /-->
 
 		<!-- wp:post-title {"isLink":true,"level":3,"fontSize":"sm","className":"book-card__title"} /-->
 

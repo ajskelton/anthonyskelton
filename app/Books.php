@@ -14,7 +14,7 @@ class Books {
 	/**
 	 * Shelves shown on the main Library page and the home page.
 	 */
-	const LIBRARY_SHELVES = [ 'read', 'currently-reading' ];
+	const LIBRARY_SHELVES = [ 'read' ];
 
 	/**
 	 * Meta keys exposed to the editor and REST API, with their types.

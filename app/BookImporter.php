@@ -41,7 +41,7 @@ class BookImporter {
 	 * [--dry-run]
 	 * : Report what would change without writing anything.
 	 *
-	 * [--no-covers]
+	 * [--skip-covers]
 	 * : Skip fetching covers from Open Library.
 	 *
 	 * [--status=<status>]
@@ -52,7 +52,7 @@ class BookImporter {
 	public function import( $args, $assoc ) {
 		[ $file ]  = $args;
 		$dry_run   = ! empty( $assoc['dry-run'] );
-		$covers    = ! isset( $assoc['covers'] ) || false !== $assoc['covers'];
+		$covers    = ! isset( $assoc['skip-covers'] );
 		$only      = $assoc['status'] ?? null;
 
 		if ( ! is_readable( $file ) ) {
@@ -68,7 +68,9 @@ class BookImporter {
 
 		foreach ( $rows as $row ) {
 			$book = $this->normalize( $row );
-			if ( ! $book['title'] ) {
+			// StoryGraph exports can carry a trailing row with only a title; it
+			// would otherwise overwrite the real entry with blanks.
+			if ( ! $book['title'] || ! $book['has_status'] ) {
 				$skipped++;
 				continue;
 			}
@@ -156,7 +158,8 @@ class BookImporter {
 	private function normalize( array $row ): array {
 		$get = fn( string $key ) => trim( $row[ $key ] ?? '' );
 
-		$status = strtolower( $get( 'read status' ) ) ?: 'read';
+		$has_status = '' !== $get( 'read status' );
+		$status     = strtolower( $get( 'read status' ) ) ?: 'read';
 		if ( ! isset( self::SHELVES[ $status ] ) ) {
 			$status = 'read';
 		}
@@ -175,7 +178,8 @@ class BookImporter {
 			'author'     => $get( 'authors' ),
 			'isbn'       => $isbn,
 			'status'     => $status,
-			'rating'     => (float) $get( 'star rating' ),
+			'has_status' => $has_status,
+			'rating'     => '' === $get( 'star rating' ) ? '' : (float) $get( 'star rating' ),
 			'review'     => $get( 'review' ),
 			'date_read'  => $date_read,
 			'post_date'  => $date_read ?: $date_added ?: current_time( 'Y-m-d' ),
@@ -230,7 +234,6 @@ class BookImporter {
 			'meta_input'  => [
 				'book_author'    => $book['author'],
 				'book_isbn'      => $book['isbn'],
-				'book_rating'    => $book['rating'],
 				'book_date_read' => $book['date_read'],
 			],
 		];
@@ -245,6 +248,13 @@ class BookImporter {
 		}
 		if ( is_wp_error( $post_id ) ) {
 			return $post_id;
+		}
+
+		// An unrated book has no rating meta at all, so the template can hide the row.
+		if ( '' === $book['rating'] ) {
+			delete_post_meta( $post_id, 'book_rating' );
+		} else {
+			update_post_meta( $post_id, 'book_rating', $book['rating'] );
 		}
 
 		[ , $slug ] = self::SHELVES[ $book['status'] ];

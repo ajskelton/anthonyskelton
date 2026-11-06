@@ -43,7 +43,7 @@ if ( 'books' === $home_section_slug && post_type_exists( 'book' ) ) :
 <!-- wp:query {"queryId":30,"query":{"perPage":6,"pages":0,"offset":0,"postType":"book","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false,"taxQuery":{"shelf":<?php echo $home_shelves; ?>}},"className":"home-section__covers"} -->
 <div class="wp-block-query home-section__covers">
 <!-- wp:post-template {"style":{"spacing":{"blockGap":"var:preset|spacing|30"}},"layout":{"type":"grid","minimumColumnWidth":"5.5rem"}} -->
-<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"2/3","scale":"cover"} /-->
+<!-- wp:post-featured-image {"isLink":true,"aspectRatio":"2/3","scale":"contain"} /-->
 <!-- /wp:post-template -->
 </div>
 <!-- /wp:query -->
