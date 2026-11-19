@@ -120,3 +120,80 @@ domReady( function () {
 		wp.blocks.unregisterBlockVariation( block, unregisterBlockVariations[ block ] );
 	} );
 } );
+
+/**
+ * Code block: language and line-number attributes.
+ *
+ * The front end (inc/hooks/code_block.php + src/js/code.js) highlights with
+ * Prism based on these. The language list comes from PHP as
+ * `blockThemeCodeLanguages`.
+ */
+import { addFilter } from '@wordpress/hooks';
+import { createHigherOrderComponent } from '@wordpress/compose';
+import { InspectorControls } from '@wordpress/block-editor';
+import { PanelBody, SelectControl, ToggleControl } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
+
+addFilter(
+	'blocks.registerBlockType',
+	'block-theme/code-attributes',
+	( settings, name ) => {
+		if ( 'core/code' !== name ) {
+			return settings;
+		}
+		return {
+			...settings,
+			attributes: {
+				...settings.attributes,
+				language: { type: 'string', default: '' },
+				showLineNumbers: { type: 'boolean', default: false },
+			},
+		};
+	}
+);
+
+const withCodeControls = createHigherOrderComponent( ( BlockEdit ) => {
+	return ( props ) => {
+		if ( 'core/code' !== props.name ) {
+			return <BlockEdit { ...props } />;
+		}
+		const { attributes, setAttributes } = props;
+		const languages =
+			typeof blockThemeCodeLanguages !== 'undefined'
+				? blockThemeCodeLanguages
+				: {};
+		const options = [
+			{ value: '', label: __( 'None (plain text)' ) },
+			...Object.keys( languages ).map( ( value ) => ( {
+				value,
+				label: languages[ value ],
+			} ) ),
+		];
+		return (
+			<>
+				<BlockEdit { ...props } />
+				<InspectorControls>
+					<PanelBody title={ __( 'Code' ) } initialOpen>
+						<SelectControl
+							label={ __( 'Language' ) }
+							value={ attributes.language || '' }
+							options={ options }
+							onChange={ ( language ) =>
+								setAttributes( { language } )
+							}
+						/>
+						<ToggleControl
+							label={ __( 'Show line numbers' ) }
+							checked={ !! attributes.showLineNumbers }
+							onChange={ ( showLineNumbers ) =>
+								setAttributes( { showLineNumbers } )
+							}
+						/>
+					</PanelBody>
+				</InspectorControls>
+			</>
+		);
+	};
+}, 'withCodeControls' );
+
+addFilter( 'editor.BlockEdit', 'block-theme/code-controls', withCodeControls );

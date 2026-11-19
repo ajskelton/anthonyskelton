@@ -1,0 +1,99 @@
+// Dark mode: swap the theme.json palette presets so every block that
+// references a preset follows the visitor's preference. Code blocks keep their
+// own dark palette in both modes.
+//
+// The system preference applies by default. The header toggle stores an
+// explicit choice as `data-theme="light|dark"` on <html>, which wins over the
+// system preference; a tiny inline script in <head> restores it before paint.
+
+@mixin dark-palette {
+	--wp--preset--color--background: #181a1f;
+	--wp--preset--color--foreground: #f0f0f0;
+	--wp--preset--color--primary-light: #21436f;
+	--wp--preset--color--primary-dark: #a0c2ef;
+	--wp--preset--color--secondary-light: #6f2143;
+	--wp--preset--color--secondary-dark: #efa0c2;
+	--wp--preset--color--tertiary-light: #436f21;
+	--wp--preset--color--tertiary-dark: #c2efa0;
+	--wp--preset--color--code-background: #22262e;
+	--wp--preset--color--code-foreground: #d8dee9;
+}
+
+html {
+	color-scheme: light dark;
+
+	&[data-theme="light"] {
+		color-scheme: light;
+	}
+
+	&[data-theme="dark"] {
+		color-scheme: dark;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) {
+		@include dark-palette;
+	}
+}
+
+:root[data-theme="dark"] {
+	@include dark-palette;
+}
+
+// Header toggle button: a sun in dark mode, a moon in light mode.
+.theme-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	padding: 0;
+	border: 1px solid transparent;
+	border-radius: 50%;
+	background: transparent;
+	color: currentcolor;
+	cursor: pointer;
+	line-height: 1;
+
+	&:hover,
+	&:focus-visible {
+		border-color: currentcolor;
+	}
+
+	svg {
+		width: 1.25rem;
+		height: 1.25rem;
+		fill: none;
+		stroke: currentcolor;
+		stroke-width: 2;
+		stroke-linecap: round;
+		stroke-linejoin: round;
+	}
+
+	.theme-toggle__sun {
+		display: none;
+	}
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) .theme-toggle {
+		.theme-toggle__sun {
+			display: block;
+		}
+
+		.theme-toggle__moon {
+			display: none;
+		}
+	}
+}
+
+:root[data-theme="dark"] .theme-toggle {
+	.theme-toggle__sun {
+		display: block;
+	}
+
+	.theme-toggle__moon {
+		display: none;
+	}
+}

@@ -10,6 +10,12 @@ class App {
 	 * 	Load custom site code
 	 */
 	public function register() {
+		( new Books() )->register();
+
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			\WP_CLI::add_command( 'race', RaceImporter::class );
+			\WP_CLI::add_command( 'beer', BeerImporter::class );
+		}
 	}
 
 	/**

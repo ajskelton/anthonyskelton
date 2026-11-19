@@ -1,0 +1,199 @@
+// Code block: highlighted in the browser by Prism (src/js/code.js), with
+// `language-*` classes added by inc/hooks/code_block.php. Token colours are
+// custom properties so they follow the site's light/dark mode (see
+// base/dark-mode.scss).
+
+@mixin code-tokens-light {
+	--code-comment: #6a737d;
+	--code-keyword: #d73a49;
+	--code-string: #0a3069;
+	--code-number: #0550ae;
+	--code-title: #6639ba;
+	--code-attr: #953800;
+	--code-builtin: #0550ae;
+	--code-tag: #116329;
+	--code-meta: #735c0f;
+	--code-line-number: #8c959f;
+	--code-line-highlight: rgba(84, 174, 255, 0.2);
+}
+
+@mixin code-tokens-dark {
+	--code-comment: #8b949e;
+	--code-keyword: #ff7b72;
+	--code-string: #a5d6ff;
+	--code-number: #79c0ff;
+	--code-title: #d2a8ff;
+	--code-attr: #ffa657;
+	--code-builtin: #79c0ff;
+	--code-tag: #7ee787;
+	--code-meta: #ffa657;
+	--code-line-number: #6e7681;
+	--code-line-highlight: rgba(56, 139, 253, 0.25);
+}
+
+:root {
+	@include code-tokens-light;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root:not([data-theme="light"]) {
+		@include code-tokens-dark;
+	}
+}
+
+:root[data-theme="dark"] {
+	@include code-tokens-dark;
+}
+
+.wp-block-code {
+	position: relative;
+	border: 0;
+	text-size-adjust: 100%;
+
+	code {
+		display: block;
+		white-space: pre;
+	}
+
+	// Language label, top right (set by the render filter).
+	&[data-language]::before {
+		content: attr(data-language);
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 0.15em 0.75em;
+		font-family: var(--wp--preset--font-family--atkinson-hyperlegible);
+		font-size: var(--wp--preset--font-size--xs, 0.75rem);
+		line-height: 1.6;
+		color: var(--code-comment);
+		pointer-events: none;
+	}
+
+	// Prism line-numbers plugin.
+	&.line-numbers {
+		padding-left: calc(var(--wp--preset--spacing--50) + 3em);
+		counter-reset: linenumber;
+
+		> code {
+			position: relative;
+		}
+
+		.line-numbers-rows {
+			position: absolute;
+			top: 0;
+			left: -3em;
+			width: 2.25em;
+			pointer-events: none;
+			user-select: none;
+			border-right: 1px solid var(--code-line-number);
+			letter-spacing: -1px;
+
+			> span {
+				display: block;
+				counter-increment: linenumber;
+
+				&::before {
+					content: counter(linenumber);
+					display: block;
+					padding-right: 0.6em;
+					text-align: right;
+					color: var(--code-line-number);
+				}
+			}
+		}
+	}
+}
+
+// Token colours (Prism class names).
+.token {
+	&.comment,
+	&.prolog,
+	&.doctype,
+	&.cdata {
+		color: var(--code-comment);
+		font-style: italic;
+	}
+
+	&.keyword,
+	&.important,
+	&.atrule,
+	&.rule {
+		color: var(--code-keyword);
+	}
+
+	&.string,
+	&.char,
+	&.regex,
+	&.url,
+	&.attr-value,
+	&.template-string {
+		color: var(--code-string);
+	}
+
+	&.number,
+	&.boolean,
+	&.constant,
+	&.symbol,
+	&.unit,
+	&.hexcode {
+		color: var(--code-number);
+	}
+
+	&.function,
+	&.class-name,
+	&.selector,
+	&.maybe-class-name {
+		color: var(--code-title);
+	}
+
+	&.attr-name,
+	&.property,
+	&.variable,
+	&.parameter,
+	&.pseudo-class,
+	&.pseudo-element {
+		color: var(--code-attr);
+	}
+
+	&.builtin,
+	&.namespace {
+		color: var(--code-builtin);
+	}
+
+	&.tag,
+	&.tag .token.punctuation {
+		color: var(--code-tag);
+	}
+
+	&.operator,
+	&.punctuation,
+	&.entity,
+	&.delimiter {
+		color: inherit;
+	}
+
+	&.deleted {
+		background: color-mix(in srgb, var(--code-keyword) 20%, transparent);
+	}
+
+	&.inserted {
+		background: color-mix(in srgb, var(--code-tag) 20%, transparent);
+	}
+
+	&.bold {
+		font-weight: bold;
+	}
+
+	&.italic {
+		font-style: italic;
+	}
+}
+
+// Attribute values in JSX braces are real script, so colour the inner tokens
+// as code rather than as a string.
+.language-jsx .token.attr-value > .token.punctuation,
+.language-tsx .token.attr-value > .token.punctuation,
+.language-jsx .token.script,
+.language-tsx .token.script {
+	color: inherit;
+}
