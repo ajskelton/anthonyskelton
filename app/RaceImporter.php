@@ -193,6 +193,10 @@ class RaceImporter {
 		[ $name, $slug ] = self::TAG;
 		$term            = get_term_by( 'slug', $slug, 'post_tag' );
 		if ( $term ) {
+			if ( $term->name !== $name && ! $dry_run ) {
+				// Tags are kept in Title Case; an older lowercase tag with this slug gets renamed.
+				wp_update_term( $term->term_id, 'post_tag', [ 'name' => $name ] );
+			}
 			return (int) $term->term_id;
 		}
 		if ( $dry_run ) {
