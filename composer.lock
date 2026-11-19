@@ -4,8 +4,42 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c1ef21fc21b831ecec3e3857b2c4d88d",
+    "content-hash": "7486c8bbc994bcd00f875730bf57e489",
     "packages": [
+        {
+            "name": "ajskelton/block-demos",
+            "version": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ajskelton/block-demos.git",
+                "reference": "98a4686b0edc409ef27a696bfd2e647391a486b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ajskelton/block-demos/zipball/98a4686b0edc409ef27a696bfd2e647391a486b9",
+                "reference": "98a4686b0edc409ef27a696bfd2e647391a486b9",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0",
+                "php": ">=7.4"
+            },
+            "default-branch": true,
+            "type": "wordpress-plugin",
+            "extra": {
+                "installer-name": "ajs-block-demos"
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "Small, de-branded demo blocks for the block-building techniques written up on anthonyskelton.com.",
+            "homepage": "https://github.com/ajskelton/block-demos",
+            "support": {
+                "source": "https://github.com/ajskelton/block-demos/tree/main",
+                "issues": "https://github.com/ajskelton/block-demos/issues"
+            },
+            "time": "2026-11-19T20:27:57+00:00"
+        },
         {
             "name": "composer/installers",
             "version": "v2.3.0",
@@ -2223,6 +2257,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
+        "ajskelton/block-demos": 20,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,
@@ -2231,5 +2266,5 @@
         "php": ">=7.1"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.9.0"
 }

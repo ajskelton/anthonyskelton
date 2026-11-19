@@ -22,6 +22,10 @@
     {
       "type": "composer",
       "url": "https://composer.deliciousbrains.com"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/ajskelton/block-demos"
     }
   ],
   "config": {
@@ -34,6 +38,7 @@
   },
   "require": {
     "php": ">=7.1",
+    "ajskelton/block-demos": "dev-main",
     "composer/installers": "^2.3",
     "deliciousbrains-plugin/wp-migrate-db-pro": "2.*",
     "johnpbloch/wordpress": "7.*",
