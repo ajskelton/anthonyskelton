@@ -13,7 +13,11 @@
 
 	// If the breakpoint exists in the map
 	@if $raw-query {
-		$query: if(type-of($raw-query) == "string", unquote($raw-query), inspect($raw-query));
+		$query: inspect($raw-query);
+
+		@if type-of($raw-query) == "string" {
+			$query: unquote($raw-query);
+		}
 
 		// Prints a media query based on the value
 		@media (min-width: #{$query} ) {
