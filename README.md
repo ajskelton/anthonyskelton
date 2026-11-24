@@ -38,7 +38,6 @@ Not every installed plugin is active on the site; that's expected.
 ### Code in this repo
 
 * `public/content/themes/anthonyskelton`: the site theme. Its built assets aren't committed; the deploy workflow builds them (see [Deployment](#deployment)).
-* `public/content/themes/phobos`: a Git submodule (`ajskelton/phobos`).
 * `public/content/mu-plugins/app.php`: must-use plugin that loads `app/`.
 * `app/`: site code, including the Library book post type and the book, beer and race importers.
 * `config/`: configuration. Environment-specific settings are in `config/environments/{development,staging,production}.php`.
@@ -64,11 +63,10 @@ WordPress admin is at `/wp/wp-admin/`.
 
 The local copy runs in [LocalWP](https://localwp.com) at `http://anthonyskelton.test`, with this repo checked out in the site's `app/` folder.
 
-1. Clone with submodules (`git clone --recurse-submodules`), or run `git submodule update --init` afterwards.
-2. Add `auth.json` with the Delicious Brains credentials.
-3. Copy `.env.example` to `.env` and fill in the database settings, `WP_ENV`, `WP_HOME` and `WP_SITEURL`. `config/app.php` reads it.
-4. Run `composer install`.
-5. Build the theme: in `public/content/themes/anthonyskelton`, run `composer install`, `npm install` and `npm run build` (or `npm start` to watch).
+1. Add `auth.json` with the Delicious Brains credentials.
+2. Copy `.env.example` to `.env` and fill in the database settings, `WP_ENV`, `WP_HOME` and `WP_SITEURL`. `config/app.php` reads it.
+3. Run `composer install`.
+4. Build the theme: in `public/content/themes/anthonyskelton`, run `composer install`, `npm install` and `npm run build` (or `npm start` to watch).
 
 ## Updating dependencies
 
